@@ -2,25 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My First GitHub Page</title>
+    <title>Emscripten Demo</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <h1>Josef's First GitHub Pages Website</h1>
+    <h1>Add Two Numbers with C++ / Emscripten</h1>
 
-    <p>This website is hosted for free using GitHub Pages.</p>
+    <input type="number" id="a" value="2">
+    +
+    <input type="number" id="b" value="3">
 
-    <h2>About this site</h2>
+    <button id="calc">Calculate</button>
 
-    <p>
-        I am learning how to create and publish websites
-        directly from a GitHub repository.
-    </p>
+    <h2>
+        Result: <span id="result">...</span>
+    </h2>
 
-    <hr>
+    <script src="emscripten/add.js"></script>
 
-    <p>Last updated: September 2026</p>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const btn = document.getElementById('calc');
+
+            btn.addEventListener('click', () => {
+                const a = parseInt(document.getElementById('a').value);
+                const b = parseInt(document.getElementById('b').value);
+
+                const result = Module.ccall(
+                    'add',
+                    'number',
+                    ['number', 'number'],
+                    [a, b]
+                );
+
+                document.getElementById('result').textContent = result;
+            });
+        };
+    </script>
 
 </body>
 </html>
